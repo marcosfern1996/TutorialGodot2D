@@ -1,0 +1,71 @@
+[gd_scene load_steps=10 format=3 uid="uid://dkmbprx3g25bn"]
+
+[ext_resource type="Script" path="res://Mob.gd" id="1_l8iyt"]
+[ext_resource type="Texture2D" uid="uid://c6jw37hkkvkft" path="res://art/enemyFlyingAlt_1.png" id="2_oubrf"]
+[ext_resource type="Texture2D" uid="uid://bf6h60hy22go2" path="res://art/enemyFlyingAlt_2.png" id="3_63rht"]
+[ext_resource type="Texture2D" uid="uid://ci5j4r4k5bkiw" path="res://art/enemySwimming_1.png" id="4_pjljn"]
+[ext_resource type="Texture2D" uid="uid://gi6qbwx14aou" path="res://art/enemySwimming_2.png" id="5_0p8bl"]
+[ext_resource type="Texture2D" uid="uid://cd2sni7r45jw" path="res://art/enemyWalking_1.png" id="6_5oyxb"]
+[ext_resource type="Texture2D" uid="uid://dnxlvwchjuw2c" path="res://art/enemyWalking_2.png" id="7_q10vw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c1sxa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_oubrf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_63rht")
+}],
+"loop": true,
+"name": &"Fly",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_pjljn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_0p8bl")
+}],
+"loop": true,
+"name": &"Swim",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_5oyxb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_q10vw")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 3.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ntkm7"]
+radius = 35.0
+height = 100.0
+
+[node name="Mob" type="RigidBody2D" groups=["mobs"]]
+position = Vector2(160, 161)
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_l8iyt")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_c1sxa")
+animation = &"Walk"
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+enable_node_path = NodePath("../CollisionShape2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_ntkm7")
+
+[connection signal="screen_exited" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
